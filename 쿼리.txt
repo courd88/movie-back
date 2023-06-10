@@ -1,0 +1,107 @@
+create table movie(
+    movie_idx int(11) not null auto_increment comment'영화 인덱스',
+    title varchar(100) not null comment'영화 제목',
+    story text(300) not null comment '줄거리',
+    opening varchar(300) not null comment '개봉일',
+    poster varchar(300) not null comment '포스터',
+    deleted boolean default 0 comment '삭제여부',
+    star_Avg int(4) comment'평점',
+    primary key(movie_idx)
+);
+select * from movie;
+insert into movie (title,story,opening,poster)
+values('aa','aa','aa,','aa');
+create table comments (
+    comments_idx int(11) not null auto_increment comment'한줄평 인덱스',
+    writer varchar(100) not null comment'작성자',
+    contents varchar(100) not null comment'한줄평',
+    star int(3) not null comment'평점',
+    movie_idx int(11) not null  comment'영화 인덱스',
+    foreign key(movie_idx) references movie(movie_idx),
+    primary key(comments_idx)
+);
+  ALTER TABLE movie 
+    ADD COLUMN star_avg float(11) ;
+alter table movie drop column average_star;
+insert into comments(writer,contents,star,movie_idx)
+values ('a','a',3,1);
+
+create table review(
+    review_idx int (11) not null auto_increment comment '리뷰 인덱스',
+    title varchar(100) not null comment'리뷰 제목',
+    count int(100) default 0 comment'조회수',
+    contents text not null comment'리뷰 본문',
+    writer varchar(100) not null comment'작성자',
+    writer_id varchar(100) not null comment '작성자 아이디',
+    review_date varchar(100) not null comment'등록일',
+    deleted boolean default 0 comment '삭제여부',
+
+    movie_idx int(11) not null  comment'영화 인덱스',
+    foreign key(movie_idx) references movie(movie_idx),
+    primary key(review_idx)
+);
+insert into review (title,writer,contents,review_date,movie_idx)
+values ('aa','aaa','aa','aa','1');
+select * from users;
+
+create table users(
+    user_idx int(11) not null auto_increment comment'유저 인덱스',
+    user_name varchar(100) not null comment '이름',
+    user_id varchar(100) not null comment'아이디',
+    user_password varchar(100) not null comment '비밀번호',
+    phone_number varchar(100) not null comment '폰번호',
+    user_email varchar(100) not null comment '이메일',
+    primary key(user_idx)
+);
+create table announcement(
+    announcement_idx int(11) not null auto_increment comment'공지사항인덱스',
+    title varchar(100) not null comment'공지사항 제목',
+    contents text not null comment'공지사항 컨텐츠',
+    announcement_date varchar(100) not null comment'등록일',
+    deleted boolean default 0 comment '삭제여부',
+    primary key(announcement_idx)
+);
+select * from reservation;
+select * from seat as s 
+inner join reservation as r on reservation_date = 4
+where r.reservation_idx = s.reservation_idx;
+
+select * from seat;
+alter table reservation drop column reserved_seat;
+create table reservation(
+    reservation_idx int(11) not null auto_increment comment'예약 인덱스',
+    reservation_name varchar(100) not null comment'예약자',
+    reservation_id varchar(100) not null comment'예약자 아이디',
+    reservation_date varchar(100) not null comment '예약일',
+--     reserved_seat int(11) not null comment '좌석 인덱스',
+    reservation_number varchar(100) not null comment'예약자 번호',
+    movie_idx int(11) not null comment'영화 인덱스',
+    primary key(reservation_idx),
+    foreign key(movie_idx) references movie(movie_idx)
+);
+  ALTER TABLE reservation 
+    ADD COLUMN reservation_id varchar(11) ;
+    insert into seat(reservation_idx,reserved_seat)
+    values('11',7);
+create table seat(
+	reservation_idx int(11) not null comment'예약번호',
+    reserved_seat int(11) not null comment'좌석 번호',
+	foreign key(reservation_idx) references reservation(reservation_idx)
+);
+select * from reservation;
+select * from seat;
+create table can_reservation_date(
+    movie_idx int(11) not null,
+    can_reservation_date varchar(300) comment'예약 가능 요일',
+    date_idx int(11) not null auto_increment comment'날짜 인덱스',
+
+    primary key(date_idx),
+    foreign key(movie_idx) references movie(movie_idx)
+
+);
+create table seat_type(
+    type_idx int(11) not null  comment'종류 인덱스',
+    photo varchar(100) not null comment'좌석사진',
+    date_idx int(11) not null,
+    foreign key(date_idx) references can_reservation_date(date_idx)
+);
